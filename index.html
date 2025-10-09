@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>História Interativa: Tudo Meu!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Soft Accents -->
+    <!-- Application Structure Plan: The application is structured into four thematic, interactive sections accessed by a clear icon-based navigation: 1) O Início (The Beginning), 2) A Solução (The Solution), 3) A Promessa (The Promise), and 4) Vamos Praticar! (Let's Practice!). This non-linear, tab-like structure was chosen over a linear slideshow to empower children to explore concepts at their own pace, making the learning process more engaging and less passive. Each section is a self-contained learning module, culminating in an interactive activity that reinforces the core message of gratitude and giving. -->
+    <!-- Visualization & Content Choices: Report Info: Tithe is 1/10 -> Goal: Explain proportion -> Viz: Interactive coin grid -> Interaction: Button click moves 1 of 10 coins -> Justification: Visually demonstrates the concept in a simple, concrete way for children. | Report Info: Cake Analogy -> Goal: Reinforce the choice of giving -> Viz: Donut Chart (Chart.js) -> Interaction: Buttons to "Give Tithe" or "Keep All" update the chart's colors and show feedback messages. -> Justification: Transforms a static analogy into an active choice, providing immediate positive reinforcement for the desired lesson. | All other text is presented in clean, readable cards with large icons to maintain a friendly and accessible UI for young users. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="bg-[#FDF6E3] text-[#5C4033]">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#D57149]">Tudo Meu?</h1>
+            <p class="text-lg md:text-xl mt-2 text-[#7f5539]">Uma história interativa sobre gratidão, dízimos e ofertas.</p>
+        </header>
+
+        <nav class="flex justify-center space-x-2 sm:space-x-4 md:space-x-6 mb-8">
+            <button data-target="inicio" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110 active-nav">
+                <span class="text-2xl md:text-3xl">🤔</span>
+            </button>
+            <button data-target="solucao" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110">
+                <span class="text-2xl md:text-3xl">💡</span>
+            </button>
+            <button data-target="promessa" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110">
+                <span class="text-2xl md:text-3xl">💖</span>
+            </button>
+            <button data-target="pratica" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110">
+                <span class="text-2xl md:text-3xl">🍰</span>
+            </button>
+        </nav>
+
+        <main id="content-container">
+            <section id="inicio" class="content-section bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">O Início da História</h2>
+                <p class="text-base md:text-lg mb-4 text-center">Você já ouviu alguém dizer: "Isso é MEU!"? Às vezes, nós também pensamos assim. Mas a Bíblia nos conta que, antigamente, algumas pessoas esqueciam de agradecer a Deus. Elas pegavam tudo que ganhavam e não separavam uma parte para cuidar da casa de Deus, a igreja. Isso deixava o coração de Deus triste.</p>
+                <div class="text-center text-sm text-[#7f5539] bg-[#FDF6E3] p-3 rounded-lg">
+                    <p>Vamos descobrir juntos uma forma mais bonita de pensar sobre as coisas que ganhamos!</p>
+                </div>
+            </section>
+
+            <section id="solucao" class="content-section hidden bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">A Solução: Dízimo e Oferta!</h2>
+                <p class="text-base md:text-lg mb-6 text-center">Deus nos ensinou uma maneira especial de mostrar nossa gratidão: com o dízimo e a oferta. Esse dinheiro é usado para cuidar da nossa igreja: pagar a luz, a água, comprar materiais para as aulinhas e manter tudo lindo!</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-[#FDF6E3] p-4 rounded-lg">
+                        <h3 class="font-bold text-lg text-center mb-2">O que é o Dízimo? 🤔</h3>
+                        <p class="text-center mb-4">É simples! A Bíblia ensina que de cada 10 coisas que ganhamos, 1 pertence a Deus. Veja como funciona com 10 moedinhas:</p>
+                        <div id="coin-grid" class="grid grid-cols-5 gap-2 max-w-xs mx-auto mb-4">
+                            <!-- Coins will be generated by JS -->
+                        </div>
+                        <div class="text-center">
+                          <button id="give-tithe-btn" class="bg-[#D57149] text-white font-bold py-2 px-4 rounded-full hover:bg-[#b95d3a] transition">Mostrar Dízimo</button>
+                        </div>
+                    </div>
+                    <div class="bg-[#FDF6E3] p-4 rounded-lg flex flex-col justify-center">
+                        <h3 class="font-bold text-lg text-center mb-2">E a Oferta? ❤️</h3>
+                        <p class="text-center">A oferta é um presente que damos a Deus, além do dízimo. É um valor que damos com o coração cheio de alegria e gratidão por tudo que Ele faz por nós!</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="promessa" class="content-section hidden bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">A Promessa de Deus</h2>
+                <p class="text-base md:text-lg mb-6 text-center">Para quem é fiel e generoso, Deus faz uma promessa incrível. E Jesus nos lembra que o amor de Deus nunca muda!</p>
+                <div class="space-y-4">
+                    <div class="bg-[#FDF6E3] p-4 rounded-lg">
+                        <p class="font-semibold text-center">Jesus disse:</p>
+                        <p class="text-lg italic text-center text-[#7f5539]">"Eu sou o mesmo, ontem, hoje e para sempre!"</p>
+                    </div>
+                    <div class="bg-[#FDF6E3] p-4 rounded-lg">
+                        <p class="font-semibold text-center">E em Malaquias 3:10, Deus promete:</p>
+                        <p class="text-lg italic text-center text-[#7f5539]">"...vejam se não vou abrir as comportas dos céus e derramar sobre vocês tantas bênçãos que nem terão onde guardá-las."</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pratica" class="content-section hidden bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
+                 <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">Vamos Praticar: A Fatia do Bolo!</h2>
+                 <p class="text-base md:text-lg mb-4 text-center">Imagine que você ganhou um bolo de aniversário com 10 fatias. O dízimo é como separar a primeira fatia, a mais especial, para agradecer a Deus por todo o bolo!</p>
+                 <div class="chart-container">
+                    <canvas id="cakeChart"></canvas>
+                </div>
+                <div id="cake-message" class="text-center font-semibold text-lg my-4 h-8"></div>
+                <div class="flex justify-center gap-4">
+                    <button id="give-slice-btn" class="bg-[#84a98c] text-white font-bold py-2 px-5 rounded-full hover:bg-[#6b8e71] transition">Dar o Dízimo</button>
+                    <button id="reset-cake-btn" class="bg-[#D57149] text-white font-bold py-2 px-5 rounded-full hover:bg-[#b95d3a] transition">Recomeçar</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+            const activeNavClass = 'scale-110';
+            const inactiveNavClass = 'opacity-70';
+
+            const coinGrid = document.getElementById('coin-grid');
+            const giveTitheBtn = document.getElementById('give-tithe-btn');
+            
+            let cakeChart;
+            const cakeMessage = document.getElementById('cake-message');
+            const giveSliceBtn = document.getElementById('give-slice-btn');
+            const resetCakeBtn = document.getElementById('reset-cake-btn');
+            const cakeCanvas = document.getElementById('cakeChart');
+            
+            const baseCakeColor = '#EAD2AC';
+            const titheCakeColor = '#FFD700';
+
+            function updateNav(targetId) {
+                navButtons.forEach(btn => {
+                    if (btn.dataset.target === targetId) {
+                        btn.classList.add(activeNavClass);
+                        btn.classList.remove(inactiveNavClass);
+                        btn.style.backgroundColor = '#FDF6E3'; 
+                    } else {
+                        btn.classList.remove(activeNavClass);
+                        btn.classList.add(inactiveNavClass);
+                        btn.style.backgroundColor = '#FEFBF2';
+                    }
+                });
+            }
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.dataset.target;
+
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    });
+
+                    updateNav(targetId);
+
+                    if (targetId === 'pratica' && cakeCanvas) {
+                        renderCakeChart();
+                    }
+                });
+            });
+
+            function setupCoins() {
+                coinGrid.innerHTML = '';
+                for (let i = 0; i < 10; i++) {
+                    const coin = document.createElement('div');
+                    coin.classList.add('coin', 'w-10', 'h-10', 'bg-[#FFD700]', 'rounded-full', 'flex', 'items-center', 'justify-center', 'text-[#DAA520]', 'font-bold', 'shadow-inner', 'transition-all', 'duration-500');
+                    coin.textContent = '$';
+                    coinGrid.appendChild(coin);
+                }
+            }
+
+            giveTitheBtn.addEventListener('click', () => {
+                setupCoins();
+                setTimeout(() => {
+                    const coins = coinGrid.querySelectorAll('.coin');
+                    const titheCoin = coins[0];
+                    titheCoin.style.transform = 'translateY(-20px) scale(1.1)';
+                    titheCoin.style.backgroundColor = '#FDF6E3';
+                    titheCoin.style.color = '#D57149';
+                    titheCoin.textContent = '💖';
+                }, 100);
+            });
+            
+            function createCakeData(activeIndex = -1) {
+                const colors = Array(10).fill(baseCakeColor);
+                if (activeIndex !== -1) {
+                    colors[activeIndex] = titheCakeColor;
+                }
+                return {
+                    labels: Array(10).fill('Fatia'),
+                    datasets: [{
+                        label: 'Fatias do Bolo',
+                        data: Array(10).fill(1),
+                        backgroundColor: colors,
+                        borderColor: '#FEFBF2',
+                        borderWidth: 2
+                    }]
+                };
+            }
+
+            function renderCakeChart() {
+                if (cakeChart) {
+                    cakeChart.destroy();
+                }
+                const ctx = cakeCanvas.getContext('2d');
+                cakeChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: createCakeData(),
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                enabled: false
+                            }
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+                cakeMessage.textContent = 'O bolo está pronto!';
+                cakeMessage.style.color = '#5C4033';
+            }
+
+            giveSliceBtn.addEventListener('click', () => {
+                if (cakeChart) {
+                    cakeChart.data = createCakeData(0);
+                    cakeChart.update();
+                    cakeMessage.textContent = 'Obrigado por seu coração generoso!';
+                    cakeMessage.style.color = '#84a98c';
+                }
+            });
+
+            resetCakeBtn.addEventListener('click', () => {
+                if (cakeChart) {
+                    renderCakeChart();
+                }
+            });
+
+            updateNav('inicio');
+            setupCoins();
+        });
+    </script>
+</body>
+</html>
