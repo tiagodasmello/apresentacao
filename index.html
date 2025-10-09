@@ -9,62 +9,76 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutrals with Soft Accents -->
-    <!-- Application Structure Plan: The application is structured into four thematic, interactive sections accessed by a clear icon-based navigation: 1) O Início (The Beginning), 2) A Solução (The Solution), 3) A Promessa (The Promise), and 4) Vamos Praticar! (Let's Practice!). This non-linear, tab-like structure was chosen over a linear slideshow to empower children to explore concepts at their own pace, making the learning process more engaging and less passive. Each section is a self-contained learning module, culminating in an interactive activity that reinforces the core message of gratitude and giving. -->
-    <!-- Visualization & Content Choices: Report Info: Tithe is 1/10 -> Goal: Explain proportion -> Viz: Interactive coin grid -> Interaction: Button click moves 1 of 10 coins -> Justification: Visually demonstrates the concept in a simple, concrete way for children. | Report Info: Cake Analogy -> Goal: Reinforce the choice of giving -> Viz: Donut Chart (Chart.js) -> Interaction: Buttons to "Give Tithe" or "Keep All" update the chart's colors and show feedback messages. -> Justification: Transforms a static analogy into an active choice, providing immediate positive reinforcement for the desired lesson. | All other text is presented in clean, readable cards with large icons to maintain a friendly and accessible UI for young users. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        body {
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
             font-family: 'Inter', sans-serif;
+        }
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            box-sizing: border-box;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .slide.active {
+            display: flex;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 95%;
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 350px;
-            height: auto;
+            max-width: 300px;
+            height: 300px;
             margin: auto;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
     </style>
 </head>
 <body class="bg-[#FDF6E3] text-[#5C4033]">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold text-[#D57149]">Tudo Meu?</h1>
-            <p class="text-lg md:text-xl mt-2 text-[#7f5539]">Uma história interativa sobre gratidão, dízimos e ofertas.</p>
-        </header>
-
-        <nav class="flex justify-center space-x-2 sm:space-x-4 md:space-x-6 mb-8">
-            <button data-target="inicio" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110 active-nav">
-                <span class="text-2xl md:text-3xl">🤔</span>
-            </button>
-            <button data-target="solucao" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110">
-                <span class="text-2xl md:text-3xl">💡</span>
-            </button>
-            <button data-target="promessa" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110">
-                <span class="text-2xl md:text-3xl">💖</span>
-            </button>
-            <button data-target="pratica" class="nav-btn p-3 md:p-4 bg-[#FEFBF2] rounded-full shadow-md transition-transform transform hover:scale-110">
-                <span class="text-2xl md:text-3xl">🍰</span>
-            </button>
-        </nav>
-
-        <main id="content-container">
-            <section id="inicio" class="content-section bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
-                <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">O Início da História</h2>
-                <p class="text-base md:text-lg mb-4 text-center">Você já ouviu alguém dizer: "Isso é MEU!"? Às vezes, nós também pensamos assim. Mas a Bíblia nos conta que, antigamente, algumas pessoas esqueciam de agradecer a Deus. Elas pegavam tudo que ganhavam e não separavam uma parte para cuidar da casa de Deus, a igreja. Isso deixava o coração de Deus triste.</p>
+    <main id="presentation-container" class="relative w-full h-full">
+        <!-- Slide 1: Início -->
+        <section id="inicio" class="slide active bg-[#FDF6E3]">
+            <div class="slide-content bg-[#FEFBF2] p-6 md:p-10 rounded-2xl shadow-lg text-center">
+                 <header class="text-center mb-6">
+                    <h1 class="text-4xl md:text-5xl font-bold text-[#D57149]">Tudo Meu?</h1>
+                    <p class="text-lg md:text-xl mt-2 text-[#7f5539]">Uma história interativa sobre gratidão, dízimos e ofertas.</p>
+                </header>
+                <h2 class="text-2xl font-bold text-[#D57149] mb-4">O Início da História 🤔</h2>
+                <p class="text-base md:text-lg mb-4">Você já ouviu alguém dizer: "Isso é MEU!"? Às vezes, nós também pensamos assim. Mas a Bíblia nos conta que, antigamente, algumas pessoas esqueciam de agradecer a Deus. Elas pegavam tudo que ganhavam e não separavam uma parte para cuidar da casa de Deus, a igreja. Isso deixava o coração de Deus triste.</p>
                 <div class="text-center text-sm text-[#7f5539] bg-[#FDF6E3] p-3 rounded-lg">
                     <p>Vamos descobrir juntos uma forma mais bonita de pensar sobre as coisas que ganhamos!</p>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="solucao" class="content-section hidden bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
-                <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">A Solução: Dízimo e Oferta!</h2>
+        <!-- Slide 2: Solução -->
+        <section id="solucao" class="slide bg-[#FDF6E3]">
+            <div class="slide-content bg-[#FEFBF2] p-6 md:p-8 rounded-2xl shadow-lg max-h-[90vh] overflow-y-auto no-scrollbar">
+                <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">A Solução: Dízimo e Oferta! 💡</h2>
                 <p class="text-base md:text-lg mb-6 text-center">Deus nos ensinou uma maneira especial de mostrar nossa gratidão: com o dízimo e a oferta. Esse dinheiro é usado para cuidar da nossa igreja: pagar a luz, a água, comprar materiais para as aulinhas e manter tudo lindo!</p>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div class="bg-[#FDF6E3] p-4 rounded-lg">
-                        <h3 class="font-bold text-lg text-center mb-2">O que é o Dízimo? 🤔</h3>
-                        <p class="text-center mb-4">É simples! A Bíblia ensina que de cada 10 coisas que ganhamos, 1 pertence a Deus. Veja como funciona com 10 moedinhas:</p>
+                        <h3 class="font-bold text-lg text-center mb-2">O que é o Dízimo?</h3>
+                        <p class="text-center text-sm mb-4">De cada 10 coisas que ganhamos, 1 pertence a Deus. Veja com 10 moedinhas:</p>
                         <div id="coin-grid" class="grid grid-cols-5 gap-2 max-w-xs mx-auto mb-4">
                             <!-- Coins will be generated by JS -->
                         </div>
@@ -74,47 +88,63 @@
                     </div>
                     <div class="bg-[#FDF6E3] p-4 rounded-lg flex flex-col justify-center">
                         <h3 class="font-bold text-lg text-center mb-2">E a Oferta? ❤️</h3>
-                        <p class="text-center">A oferta é um presente que damos a Deus, além do dízimo. É um valor que damos com o coração cheio de alegria e gratidão por tudo que Ele faz por nós!</p>
+                        <p class="text-center text-sm">A oferta é um presente que damos a Deus, além do dízimo. É um valor que damos com o coração cheio de alegria e gratidão por tudo que Ele faz por nós!</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="promessa" class="content-section hidden bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
-                <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">A Promessa de Deus</h2>
-                <p class="text-base md:text-lg mb-6 text-center">Para quem é fiel e generoso, Deus faz uma promessa incrível. E Jesus nos lembra que o amor de Deus nunca muda!</p>
+        <!-- Slide 3: Promessa -->
+        <section id="promessa" class="slide bg-[#FDF6E3]">
+            <div class="slide-content bg-[#FEFBF2] p-6 md:p-10 rounded-2xl shadow-lg text-center">
+                <h2 class="text-2xl font-bold text-[#D57149] mb-4">A Promessa de Deus 💖</h2>
+                <p class="text-base md:text-lg mb-6">Para quem é fiel e generoso, Deus faz uma promessa incrível. E Jesus nos lembra que o amor de Deus nunca muda!</p>
                 <div class="space-y-4">
                     <div class="bg-[#FDF6E3] p-4 rounded-lg">
-                        <p class="font-semibold text-center">Jesus disse:</p>
-                        <p class="text-lg italic text-center text-[#7f5539]">"Eu sou o mesmo, ontem, hoje e para sempre!"</p>
+                        <p class="font-semibold">Jesus disse:</p>
+                        <p class="text-lg italic text-[#7f5539]">"Eu sou o mesmo, ontem, hoje e para sempre!"</p>
                     </div>
                     <div class="bg-[#FDF6E3] p-4 rounded-lg">
-                        <p class="font-semibold text-center">E em Malaquias 3:10, Deus promete:</p>
-                        <p class="text-lg italic text-center text-[#7f5539]">"...vejam se não vou abrir as comportas dos céus e derramar sobre vocês tantas bênçãos que nem terão onde guardá-las."</p>
+                        <p class="font-semibold">E em Malaquias 3:10, Deus promete:</p>
+                        <p class="text-lg italic text-[#7f5539]">"...vejam se não vou abrir as comportas dos céus e derramar sobre vocês tantas bênçãos que nem terão onde guardá-las."</p>
                     </div>
                 </div>
-            </section>
-
-            <section id="pratica" class="content-section hidden bg-[#FEFBF2] p-6 rounded-2xl shadow-lg">
-                 <h2 class="text-2xl font-bold text-[#D57149] mb-4 text-center">Vamos Praticar: A Fatia do Bolo!</h2>
-                 <p class="text-base md:text-lg mb-4 text-center">Imagine que você ganhou um bolo de aniversário com 10 fatias. O dízimo é como separar a primeira fatia, a mais especial, para agradecer a Deus por todo o bolo!</p>
+            </div>
+        </section>
+        
+        <!-- Slide 4: Prática -->
+        <section id="pratica" class="slide bg-[#FDF6E3]">
+            <div class="slide-content bg-[#FEFBF2] p-6 md:p-8 rounded-2xl shadow-lg text-center max-h-[90vh] overflow-y-auto no-scrollbar">
+                 <h2 class="text-2xl font-bold text-[#D57149] mb-4">Vamos Praticar: A Fatia do Bolo! 🍰</h2>
+                 <p class="text-base md:text-lg mb-4">Imagine que você ganhou um bolo de aniversário com 10 fatias. O dízimo é como separar a primeira fatia para agradecer a Deus por todo o bolo!</p>
                  <div class="chart-container">
                     <canvas id="cakeChart"></canvas>
                 </div>
-                <div id="cake-message" class="text-center font-semibold text-lg my-4 h-8"></div>
+                <div id="cake-message" class="font-semibold text-lg my-4 h-8"></div>
                 <div class="flex justify-center gap-4">
                     <button id="give-slice-btn" class="bg-[#84a98c] text-white font-bold py-2 px-5 rounded-full hover:bg-[#6b8e71] transition">Dar o Dízimo</button>
                     <button id="reset-cake-btn" class="bg-[#D57149] text-white font-bold py-2 px-5 rounded-full hover:bg-[#b95d3a] transition">Recomeçar</button>
                 </div>
-            </section>
-        </main>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navigation -->
+    <div class="presentation-nav flex justify-center items-center fixed bottom-5 left-1/2 -translate-x-1/2 z-10 space-x-4">
+        <button id="prev-btn" class="nav-arrow bg-[#D57149] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition transform hover:scale-110 disabled:opacity-50 text-2xl font-bold">←</button>
+        <span id="slide-counter" class="text-[#5C4033] font-semibold bg-[#FEFBF2] py-2 px-4 rounded-full shadow-md">1 / 4</span>
+        <button id="next-btn" class="nav-arrow bg-[#D57149] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition transform hover:scale-110 disabled:opacity-50 text-2xl font-bold">→</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const contentSections = document.querySelectorAll('.content-section');
-            const activeNavClass = 'scale-110';
-            const inactiveNavClass = 'opacity-70';
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const slideCounter = document.getElementById('slide-counter');
 
             const coinGrid = document.getElementById('coin-grid');
             const giveTitheBtn = document.getElementById('give-tithe-btn');
@@ -128,38 +158,36 @@
             const baseCakeColor = '#EAD2AC';
             const titheCakeColor = '#FFD700';
 
-            function updateNav(targetId) {
-                navButtons.forEach(btn => {
-                    if (btn.dataset.target === targetId) {
-                        btn.classList.add(activeNavClass);
-                        btn.classList.remove(inactiveNavClass);
-                        btn.style.backgroundColor = '#FDF6E3'; 
-                    } else {
-                        btn.classList.remove(activeNavClass);
-                        btn.classList.add(inactiveNavClass);
-                        btn.style.backgroundColor = '#FEFBF2';
-                    }
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
                 });
+
+                slideCounter.textContent = `${index + 1} / ${totalSlides}`;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === totalSlides - 1;
+
+                // Initialize animations/charts for the current slide
+                if (slides[index].id === 'solucao') {
+                    setupCoins();
+                }
+                if (slides[index].id === 'pratica' && cakeCanvas) {
+                    renderCakeChart();
+                }
             }
 
-            navButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetId = button.dataset.target;
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
 
-                    contentSections.forEach(section => {
-                        if (section.id === targetId) {
-                            section.classList.remove('hidden');
-                        } else {
-                            section.classList.add('hidden');
-                        }
-                    });
-
-                    updateNav(targetId);
-
-                    if (targetId === 'pratica' && cakeCanvas) {
-                        renderCakeChart();
-                    }
-                });
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
             });
 
             function setupCoins() {
@@ -173,14 +201,16 @@
             }
 
             giveTitheBtn.addEventListener('click', () => {
-                setupCoins();
+                setupCoins(); // Reset coins before animation
                 setTimeout(() => {
                     const coins = coinGrid.querySelectorAll('.coin');
-                    const titheCoin = coins[0];
-                    titheCoin.style.transform = 'translateY(-20px) scale(1.1)';
-                    titheCoin.style.backgroundColor = '#FDF6E3';
-                    titheCoin.style.color = '#D57149';
-                    titheCoin.textContent = '💖';
+                    if (coins.length > 0) {
+                        const titheCoin = coins[0];
+                        titheCoin.style.transform = 'translateY(-20px) scale(1.1)';
+                        titheCoin.style.backgroundColor = '#FDF6E3';
+                        titheCoin.style.color = '#D57149';
+                        titheCoin.textContent = '💖';
+                    }
                 }, 100);
             });
             
@@ -213,12 +243,8 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                enabled: false
-                            }
+                            legend: { display: false },
+                            tooltip: { enabled: false }
                         },
                         animation: {
                             animateScale: true,
@@ -244,10 +270,11 @@
                     renderCakeChart();
                 }
             });
-
-            updateNav('inicio');
-            setupCoins();
+            
+            // Initial setup
+            showSlide(currentSlide);
         });
     </script>
 </body>
 </html>
+
