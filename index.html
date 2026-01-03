@@ -2,12 +2,12 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convite - Artur 3 Anos</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* ================= ESTILOS DO CONVITE ================= */
+        /* Animações personalizadas */
         @keyframes spin-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -18,11 +18,23 @@
 
         /* Animação do Sonic Atravessando a Tela */
         @keyframes sonicRun {
-            0% { left: -150px; transform: scaleX(1); }
-            45% { left: 110%; transform: scaleX(1); }
-            45.01% { transform: scaleX(-1); }
-            50% { left: 110%; }
-            100% { left: 110%; }
+            0% { 
+                left: -150px; 
+                transform: scaleX(1); /* Virado para direita */
+            }
+            45% { 
+                left: 110%; 
+                transform: scaleX(1); 
+            }
+            45.01% { 
+                transform: scaleX(-1); /* Vira para esquerda instantaneamente */
+            }
+            50% {
+                left: 110%; /* Pausa fora da tela */
+            }
+            100% { 
+                left: 110%; 
+            }
         }
 
         .sonic-container {
@@ -30,194 +42,41 @@
             bottom: 10px;
             left: -150px;
             z-index: 40;
-            animation: sonicRun 12s linear infinite; /* Mais lento para ser mais fácil clicar */
+            animation: sonicRun 8s linear infinite; /* Um pouco mais lento para ver os detalhes */
+            /* Filtro para garantir que destaque no fundo azul se necessário, mas a imagem já é nítida */
             filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
-            width: 100px;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .sonic-container:active {
-            transform: scale(0.9);
+            width: 100px; /* Tamanho ajustado para a imagem */
+            height: auto;
         }
 
         .sonic-image {
             width: 100%;
             height: auto;
-            image-rendering: pixelated;
+            image-rendering: pixelated; /* Garante que o pixel art fique nítido e não borrado */
         }
 
-        /* Balão de fala */
-        .sonic-speech {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: #333;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            pointer-events: none;
-            animation: bounce 1s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-5px); }
-        }
-
-        .sonic-speech::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 5px 5px 0;
-            border-style: solid;
-            border-color: white transparent transparent transparent;
-        }
-
+        /* Utilitários Gerais */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
-            touch-action: pan-y; /* Melhora a resposta ao toque */
+            overflow-x: hidden; /* Evita barra de rolagem lateral na animação */
+        }
+        
+        .modal-open {
+            display: flex !important;
         }
 
-        /* CLASSE UTILITÁRIA CRÍTICA */
-        /* Garante que o elemento seja ocultado mesmo se tiver ID com display flex */
-        .hidden {
-            display: none !important;
+        @keyframes slideRight {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw - 6rem)); }
         }
-
-        /* ================= ESTILOS DO JOGO ================= */
-        #game-modal {
-            background-color: #222;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9999; /* Z-index altíssimo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            touch-action: none; /* Impede zoom e scroll no jogo */
-        }
-
-        #game-wrapper {
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            width: 100%;
-            height: 100%;
-            max-width: 800px;
-            max-height: 450px;
-            background: #000;
-        }
-
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        #ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-        }
-
-        .hud-top {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 20px;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 2px 2px 0 #000;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
-        }
-
-        #start-screen, #game-over-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            pointer-events: auto;
-            text-align: center;
-            padding: 20px;
-            z-index: 20; /* Acima do UI */
-        }
-
-        .game-title {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: #FFEB3B;
-            text-shadow: 3px 3px 0 #D32F2F;
-            font-style: italic;
-            font-weight: 900;
-        }
-
-        .game-btn {
-            padding: 12px 30px;
-            font-size: 18px;
-            background: #FF5722;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 4px 0 #BF360C;
-            margin: 8px;
-            text-transform: uppercase;
-            touch-action: manipulation; /* Melhora resposta ao toque */
-        }
-
-        .game-btn:active {
-            transform: translateY(4px);
-            box-shadow: none;
-        }
-
-        .close-game-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #FF5252;
-            color: white;
-            border: 2px solid white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-weight: bold;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        .animate-slide-right {
+            animation: slideRight 10s linear infinite alternate;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-blue-700 via-blue-600 to-blue-900 text-white relative flex flex-col">
 
-    <!-- Container Principal do Convite -->
+    <!-- Container Principal -->
     <div class="flex-grow flex flex-col items-center justify-center p-4 relative z-10 w-full max-w-md mx-auto pb-24">
         
         <!-- Card do Convite -->
@@ -225,24 +84,33 @@
             
             <!-- Cabeçalho -->
             <div class="bg-blue-800 p-6 text-center relative overflow-hidden">
+                <!-- Efeito de luz de fundo -->
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500 rounded-full blur-3xl opacity-50"></div>
                 
                 <div class="relative z-10">
-                    <h2 class="text-yellow-400 font-black tracking-widest text-xl uppercase drop-shadow-md mb-2">LEVEL 3</h2>
-                    <h1 class="text-5xl font-extrabold italic tracking-tighter drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)] transform -skew-x-6">Artur</h1>
-                    
+                    <h2 class="text-yellow-400 font-black tracking-widest text-xl uppercase drop-shadow-md mb-2">
+                        LEVEL 3
+                    </h2>
+                    <h1 class="text-5xl font-extrabold italic tracking-tighter drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)] transform -skew-x-6">
+                        Artur
+                    </h1>
+                    <!-- Estrelas -->
                     <div class="mt-4 flex justify-center space-x-2">
-                        <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-8 h-8" style="animation-delay: 100ms;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-8 h-8" style="animation-delay: 100ms;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                     </div>
                 </div>
             </div>
 
-            <!-- Corpo -->
+            <!-- Corpo do Texto -->
             <div class="p-5 text-center space-y-5">
-                <div><p class="text-lg font-bold text-blue-100">Você foi convocado para essa super aventura em alta velocidade!</p></div>
+                <div><p class="text-lg font-bold text-blue-100">
+                    Você foi convocado para essa super aventura em alta velocidade!
+                </p><br></div>
             
+                
+                <!-- Detalhes Data/Hora/Local -->
                 <div class="bg-blue-900/50 rounded-xl p-4 border border-blue-400/30">
                     <p class="text-2xl font-black text-white mb-1">25 de Janeiro</p>
                     <p class="text-xl font-bold text-yellow-300">19:00h</p>
@@ -250,8 +118,10 @@
                     <p class="text-sm font-medium text-blue-200">Gioia - D' Festas e Eventos</p>
                 </div>
 
-                <!-- Botões -->
+                <!-- Botões de Ação -->
                 <div class="grid grid-cols-3 gap-3 pt-2">
+                    
+                    <!-- Botão Mapa -->
                     <a href="https://maps.app.goo.gl/V5CkSG9ncsQ3hMi66" 
                        target="_blank" 
                        class="flex flex-col items-center justify-center gap-2 group cursor-pointer no-underline">
@@ -262,362 +132,123 @@
                         <span class="text-xs font-bold uppercase tracking-wide text-white">Local</span>
                     </a>
 
-                    <a href="https://forms.gle/KRFkrsyVUmvpHej5A" target="_blank" class="flex flex-col items-center justify-center gap-2 group cursor-pointer no-underline">
-                        <div class="w-14 h-14 bg-green-500 rounded-2xl flex items-center justify-center shadow-lg border-b-4 border-green-700">
+                    <!-- Botão Confirmar -->
+                    <a href="https://forms.gle/KRFkrsyVUmvpHej5A" 
+                       target="_blank" 
+                       class="flex flex-col items-center justify-center gap-2 group cursor-pointer no-underline">
+                        <div class="w-14 h-14 bg-green-500 rounded-2xl flex items-center justify-center shadow-lg transform transition group-hover:scale-110 group-hover:-rotate-3 border-b-4 border-green-700">
+                            <!-- Ícone CheckSquare -->
                             <svg class="text-white w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
                         </div>
                         <span class="text-xs font-bold uppercase tracking-wide text-white">Confirmar Presença</span>
                     </a>
 
-                    <button onclick="toggleGiftModal(true)" class="flex flex-col items-center justify-center gap-2 group cursor-pointer">
-                        <div class="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-lg border-b-4 border-yellow-600">
+                    <!-- Botão Presente (Abre Modal) -->
+                    <button onclick="toggleModal(true)" 
+                            class="flex flex-col items-center justify-center gap-2 group cursor-pointer">
+                        <div class="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center shadow-lg transform transition group-hover:scale-110 group-hover:rotate-6 border-b-4 border-yellow-600">
+                            <!-- Ícone Gift -->
                             <svg class="text-blue-900 w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>
                         </div>
                         <span class="text-xs font-bold uppercase tracking-wide text-white">Presente</span>
                     </button>
+
                 </div>
             </div>
             
+            <!-- Rodapé -->
             <div class="bg-blue-950 p-3 text-center text-xs text-blue-400 flex justify-center items-center">
-                <svg class="w-3 h-3 mr-1 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <svg class="w-3 h-3 mr-1 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 Mais Rápido, Mais Rápido!
             </div>
         </div>
     </div>
 
-    <!-- BOTÃO FLUTUANTE DO JOGO -->
-    <div class="sonic-container" onclick="openGame()" title="Clique para Jogar!">
-        <div class="sonic-speech">Jogue Comigo!</div>
-        <img src="https://www.gifcen.com/wp-content/uploads/2024/01/sonic-running-gif-3.gif" alt="Sonic" class="sonic-image" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:3rem;text-align:center;\'>🦔<br><span style=\'font-size:10px\'>JOGAR</span></div>'">
+    <!-- ANIMAÇÃO DO SONIC (Rodapé Fixo) -->
+    <!-- Utilizando GIF externo para garantir a fidelidade e nitidez do personagem -->
+    <div class="sonic-container">
+        <img src="https://www.gifcen.com/wp-content/uploads/2024/01/sonic-running-gif-3.gif" 
+             alt="Sonic Correndo" 
+             class="sonic-image"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:3rem;\'>🦔💨</div>'">
+        <!-- Poeira de corrida (atrás) -->
+        <div class="absolute top-[80%] left-[-10px] w-16 h-4 bg-gradient-to-l from-white to-transparent opacity-60 blur-md rounded-full"></div>
     </div>
 
-    <!-- MODAL DE SUGESTÃO DE PRESENTE -->
-    <div id="giftModal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl w-full max-w-xs overflow-hidden shadow-2xl border-4 border-yellow-400">
+    <!-- MODAL DE SUGESTÃO DE PRESENTE (Escondido por padrão) -->
+    <div id="giftModal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-white rounded-3xl w-full max-w-xs overflow-hidden shadow-2xl transform transition-transform scale-100 border-4 border-yellow-400 relative">
+            
+            <!-- Cabeçalho Modal -->
             <div class="bg-yellow-400 p-4 flex justify-between items-center">
-                <h3 class="text-blue-900 font-black text-xl italic uppercase">Dicas</h3>
-                <button onclick="toggleGiftModal(false)" class="text-blue-900 font-bold p-2 bg-yellow-500 rounded-full hover:bg-yellow-600">X</button>
+                <h3 class="text-blue-900 font-black text-xl italic uppercase">Dicas de Presente</h3>
+                <button onclick="toggleModal(false)" class="text-blue-900 hover:bg-yellow-500 p-1 rounded-full transition">
+                    <!-- Ícone X -->
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
             </div>
+
+            <!-- Conteúdo Modal -->
             <div class="p-6 space-y-4 bg-blue-50 text-blue-900">
+                
+                <!-- Item Roupa -->
                 <div class="flex items-center space-x-3 bg-white p-3 rounded-xl shadow-sm border border-blue-100">
-                    <span class="text-2xl">👕</span>
-                    <div><p class="text-xs font-bold text-gray-500 uppercase">Roupa</p><p class="text-lg font-black">3 anos</p></div>
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <span class="text-xl">👕</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-500 uppercase">Roupa</p>
+                        <p class="text-lg font-black">Tamanho 3 anos</p>
+                    </div>
                 </div>
+
+                <!-- Item Calçado -->
                 <div class="flex items-center space-x-3 bg-white p-3 rounded-xl shadow-sm border border-blue-100">
-                    <span class="text-2xl">👟</span>
-                    <div><p class="text-xs font-bold text-gray-500 uppercase">Calçado</p><p class="text-lg font-black">24</p></div>
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <span class="text-xl">👟</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-500 uppercase">Calçado</p>
+                        <p class="text-lg font-black">24</p>
+                    </div>
                 </div>
+
+                <!-- Item Gostos -->
                 <div class="bg-white p-3 rounded-xl shadow-sm border border-blue-100">
-                    <p class="text-xs font-bold text-gray-500 uppercase mb-1">Gostos</p>
-                    <p class="text-sm font-medium">Brinquedos de montar, Carrinhos, Massinha, Super heróis.</p>
+                    <p class="text-xs font-bold text-gray-500 uppercase mb-1">O que ele gosta?</p>
+                    <p class="text-sm font-medium leading-relaxed">
+                        Brinquedos de montar, Carrinhos, Massinha, Super heróis, Livros de Pintura e de História com abas
+                    </p>
                 </div>
-                <button onclick="toggleGiftModal(false)" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md">OK!</button>
+
+                <!-- Botão Fechar -->
+                <button onclick="toggleModal(false)" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md hover:bg-blue-700 transition active:scale-95">
+                    Entendido!
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DO JOGO -->
-    <div id="game-modal" class="hidden">
-        <button class="close-game-btn" onclick="closeGame()">X</button>
-        <div id="game-wrapper">
-            <canvas id="gameCanvas" width="800" height="450"></canvas>
-            <div id="ui-layer">
-                <div class="hud-top">
-                    <span id="score-display">PTS: 0</span>
-                    <span id="coins-display">MOEDAS: 0</span>
-                </div>
-            </div>
-            <div id="start-screen">
-                <h1 class="game-title">CORREDOR VELOZ</h1>
-                <p>Toque para Pular</p>
-                <button id="start-btn" class="game-btn">INICIAR</button>
-            </div>
-            <div id="game-over-screen" class="hidden">
-                <h1 class="game-title">FIM DE JOGO</h1>
-                <p id="final-score" style="font-size:20px; margin-bottom:20px;">Pontos: 0</p>
-                <button id="restart-btn" class="game-btn">REINICIAR</button>
-                <button class="game-btn" style="background:#444;" onclick="closeGame()">SAIR</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- Script para abrir/fechar o Modal -->
     <script>
-        // --- Modal Presente ---
-        function toggleGiftModal(show) {
+        function toggleModal(show) {
             const modal = document.getElementById('giftModal');
             if (show) {
                 modal.classList.remove('hidden');
-                modal.classList.add('flex');
+                modal.classList.add('flex'); // Usa flex para centralizar
             } else {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
             }
         }
 
-        // ================= LÓGICA DO JOGO =================
-        const gameModal = document.getElementById('game-modal');
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const startScreen = document.getElementById('start-screen');
-        const gameOverScreen = document.getElementById('game-over-screen');
-        
-        let gameActive = false;
-        let gameState = 'START';
-        let animationFrameId;
-        
-        // Variáveis de Jogo
-        let frames = 0;
-        let score = 0;
-        let coins = 0;
-        let gameSpeed = 5;
-        const groundHeight = 50;
-        
-        // Imagem
-        const sonicSprite = new Image();
-        sonicSprite.src = "https://www.gifcen.com/wp-content/uploads/2024/01/sonic-running-gif-3.gif";
-        sonicSprite.crossOrigin = "Anonymous"; 
-
-        const player = {
-            x: 100, y: 0, width: 40, height: 40, dy: 0,
-            jumpForce: 12, gravity: 0.6, grounded: false, rotation: 0,
-            
-            draw: function() {
-                ctx.save();
-                ctx.translate(this.x + this.width/2, this.y + this.height/2);
-                if (!this.grounded) this.rotation += 0.4;
-                else this.rotation = 0;
-                ctx.rotate(this.rotation);
-                
-                try {
-                    ctx.drawImage(sonicSprite, -30, -30, 60, 60);
-                } catch (e) {
-                    ctx.fillStyle = '#2962FF';
-                    ctx.fillRect(-20, -20, 40, 40);
-                }
-                ctx.restore();
-            },
-            update: function() {
-                if (keys.active) {
-                    if (this.grounded) {
-                        this.dy = -this.jumpForce;
-                        this.grounded = false;
-                        createParticles(this.x+20, this.y+40, 5, '#8D6E63');
-                    }
-                }
-                this.y += this.dy;
-                if (this.y + this.height < canvas.height - groundHeight) {
-                    this.dy += this.gravity;
-                    this.grounded = false;
-                } else {
-                    this.dy = 0;
-                    this.grounded = true;
-                    this.y = canvas.height - groundHeight - this.height;
-                }
-            }
-        };
-
-        let obstacles = [];
-        let collectibles = [];
-        let particles = [];
-        let clouds = [];
-        const keys = { active: false };
-
-        // Controles Globais
-        function openGame() {
-            gameModal.classList.remove('hidden');
-            gameActive = true;
-            gameState = 'START';
-            startScreen.classList.remove('hidden');
-            gameOverScreen.classList.add('hidden');
-            
-            // Garante que o start screen apareça e game over suma
-            document.getElementById('start-screen').style.display = 'flex';
-            document.getElementById('game-over-screen').style.display = 'none';
-
-            // Desenhar fundo inicial para não ficar preto
-            ctx.fillStyle = '#87CEEB';
-            ctx.fillRect(0,0,canvas.width, canvas.height);
-        }
-
-        function closeGame() {
-            gameModal.classList.add('hidden');
-            gameActive = false;
-            cancelAnimationFrame(animationFrameId);
-        }
-
-        function startGame() {
-            gameState = 'PLAYING';
-            // Usa style direct para garantir que o CSS não atrapalhe
-            startScreen.classList.add('hidden');
-            gameOverScreen.classList.add('hidden');
-            
-            // Resetar
-            score = 0; coins = 0; gameSpeed = 6; frames = 0;
-            player.y = canvas.height - groundHeight - 40;
-            player.dy = 0;
-            obstacles = []; collectibles = []; particles = []; clouds = [];
-            
-            // Cancelar loop anterior se existir
-            if(animationFrameId) cancelAnimationFrame(animationFrameId);
-            
-            // Nuvens iniciais
-            for(let i=0; i<5; i++) spawnCloud(true);
-            
-            gameLoop();
-        }
-
-        // Listeners
-        window.addEventListener('keydown', (e) => {
-            if(gameActive && (e.code === 'Space' || e.code === 'ArrowUp')) {
-                e.preventDefault(); keys.active = true;
+        // Fechar ao clicar fora do card
+        document.getElementById('giftModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleModal(false);
             }
         });
-        window.addEventListener('keyup', (e) => {
-            if(gameActive) keys.active = false;
-        });
-        
-        // Touch events seguros
-        canvas.addEventListener('touchstart', (e) => {
-            if(!gameActive) return;
-            e.preventDefault(); keys.active = true;
-        }, {passive: false});
-        
-        canvas.addEventListener('touchend', (e) => {
-            if(!gameActive) return;
-            e.preventDefault(); keys.active = false;
-        });
-
-        document.getElementById('start-btn').addEventListener('click', startGame);
-        document.getElementById('restart-btn').addEventListener('click', startGame);
-
-        function spawnCloud(initial = false) {
-            clouds.push({
-                x: initial ? Math.random() * canvas.width : canvas.width + 50,
-                y: Math.random() * (canvas.height/2),
-                size: 30 + Math.random() * 40,
-                speed: 0.5 + Math.random() * 0.5
-            });
-        }
-
-        function createParticles(x, y, count, color) {
-            for(let i=0; i<count; i++) {
-                particles.push({
-                    x: x, y: y,
-                    vx: (Math.random()-0.5)*5, vy: (Math.random()-1)*5,
-                    life: 1.0, color: color, size: Math.random()*5+2
-                });
-            }
-        }
-
-        function gameLoop() {
-            if(!gameActive) return;
-
-            if(gameState === 'PLAYING') {
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                frames++;
-                score += 0.1;
-                if(frames % 600 === 0) gameSpeed += 0.5;
-
-                // Nuvens
-                if(Math.random() < 0.02) spawnCloud();
-                ctx.fillStyle = 'rgba(255,255,255,0.8)';
-                for(let i=clouds.length-1; i>=0; i--) {
-                    let c = clouds[i];
-                    c.x -= c.speed;
-                    ctx.beginPath(); ctx.arc(c.x, c.y, c.size, 0, Math.PI*2); ctx.fill();
-                    if(c.x < -100) clouds.splice(i,1);
-                }
-
-                // Chão
-                const offset = (frames * gameSpeed) % 40;
-                for(let x=-offset; x<canvas.width; x+=40) {
-                    ctx.fillStyle = ((x+offset+frames*gameSpeed)/40)%2 < 1 ? '#4CAF50' : '#43A047';
-                    ctx.fillRect(x, canvas.height-groundHeight, 41, groundHeight);
-                }
-
-                player.update();
-                player.draw();
-
-                // Obstáculos
-                if(frames % 90 === 0 && Math.random() > 0.3) {
-                    let type = Math.random() > 0.5 ? 'spike' : 'block';
-                    obstacles.push({
-                        x: canvas.width, 
-                        y: type==='spike' ? canvas.height-groundHeight-30 : canvas.height-groundHeight-40,
-                        w: type==='spike' ? 30 : 40,
-                        h: type==='spike' ? 30 : 40,
-                        type: type
-                    });
-                    // Moedas sobre obstáculo
-                    if(Math.random() > 0.5) {
-                        collectibles.push({x:canvas.width+10, y:canvas.height-groundHeight-90, r:10, collected:false});
-                    }
-                } else if (frames % 60 === 0 && Math.random() > 0.6) {
-                    collectibles.push({x:canvas.width, y:canvas.height-groundHeight-20, r:10, collected:false});
-                }
-
-                // Loop Obstáculos
-                for(let i=obstacles.length-1; i>=0; i--) {
-                    let o = obstacles[i];
-                    o.x -= gameSpeed;
-                    
-                    if(o.type === 'spike') {
-                        ctx.fillStyle = '#5D4037';
-                        ctx.beginPath(); ctx.moveTo(o.x, o.y+o.h); ctx.lineTo(o.x+o.w/2, o.y); ctx.lineTo(o.x+o.w, o.y+o.h); ctx.fill();
-                    } else {
-                        ctx.fillStyle = '#795548'; ctx.fillRect(o.x, o.y, o.w, o.h);
-                        ctx.fillStyle = '#8D6E63'; ctx.fillRect(o.x+5, o.y+5, o.w-10, o.h-10);
-                    }
-
-                    // Colisão Simples
-                    if(player.x < o.x + o.w && player.x + player.width > o.x &&
-                       player.y < o.y + o.h && player.y + player.height > o.y) {
-                        createParticles(player.x+20, player.y+20, 20, '#FF5722');
-                        gameState = 'GAMEOVER';
-                        gameOverScreen.classList.remove('hidden');
-                        document.getElementById('final-score').innerText = `Pontos: ${Math.floor(score)} | Moedas: ${coins}`;
-                    }
-                    if(o.x < -50) obstacles.splice(i,1);
-                }
-
-                // Moedas
-                for(let i=collectibles.length-1; i>=0; i--) {
-                    let c = collectibles[i];
-                    c.x -= gameSpeed;
-                    if(!c.collected) {
-                        ctx.fillStyle = '#FFD700';
-                        ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, Math.PI*2); ctx.fill();
-                        
-                        // Colisão Moeda
-                        let dx = (player.x + 20) - c.x;
-                        let dy = (player.y + 20) - c.y;
-                        if(Math.sqrt(dx*dx + dy*dy) < 35) {
-                            c.collected = true;
-                            coins++; score += 50;
-                            createParticles(c.x, c.y, 5, '#FFD700');
-                        }
-                    }
-                    if(c.x < -20 || c.collected) collectibles.splice(i,1);
-                }
-
-                // Partículas
-                for(let i=particles.length-1; i>=0; i--) {
-                    let p = particles[i];
-                    p.x += p.vx; p.y += p.vy; p.life -= 0.05;
-                    ctx.globalAlpha = Math.max(0, p.life); // Correção de segurança
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(p.x, p.y, p.size, p.size);
-                    ctx.globalAlpha = 1.0;
-                    if(p.life <= 0) particles.splice(i,1);
-                }
-
-                // HUD
-                document.getElementById('score-display').innerText = `PTS: ${Math.floor(score)}`;
-                document.getElementById('coins-display').innerText = `MOEDAS: ${coins}`;
-            }
-            
-            animationFrameId = requestAnimationFrame(gameLoop);
-        }
     </script>
+
 </body>
 </html>
