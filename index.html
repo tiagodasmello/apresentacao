@@ -7,7 +7,7 @@
     <!-- Tailwind CSS para estilização rápida e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Animações personalizadas que o Tailwind padrão não tem */
+        /* Animações personalizadas */
         @keyframes spin-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -15,39 +15,69 @@
         .animate-spin-slow {
             animation: spin-slow 3s linear infinite;
         }
-        
-        /* Fontes e ajustes finos */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        /* Utilitários para o Modal */
-        .modal-open {
-            display: flex !important;
-        }
-        @keyframes slideRight {
-            0% {
-                transform: translateX(0); /* Posição inicial (esquerda) */
+
+        /* Animação do Sonic Atravessando a Tela */
+        @keyframes sonicRun {
+            0% { 
+                left: -150px; 
+                transform: scaleX(1); /* Virado para direita */
             }
-            100% {
-                transform: translateX(calc(100vw - 6rem)); /* Posição final (direita, ajustado para o tamanho do elemento) */
+            45% { 
+                left: 110%; 
+                transform: scaleX(1); 
+            }
+            45.01% { 
+                transform: scaleX(-1); /* Vira para esquerda instantaneamente */
+            }
+            50% {
+                left: 110%; /* Pausa fora da tela */
+            }
+            100% { 
+                left: 110%; 
             }
         }
 
-        /* Aplica a animação ao elemento, definindo duração e repetição */
+        .sonic-container {
+            position: fixed;
+            bottom: 10px;
+            left: -150px;
+            z-index: 40;
+            animation: sonicRun 6s linear infinite; /* Um pouco mais lento para ver os detalhes */
+            /* Filtro para garantir que destaque no fundo azul se necessário, mas a imagem já é nítida */
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+            width: 100px; /* Tamanho ajustado para a imagem */
+            height: auto;
+        }
+
+        .sonic-image {
+            width: 100%;
+            height: auto;
+            image-rendering: pixelated; /* Garante que o pixel art fique nítido e não borrado */
+        }
+
+        /* Utilitários Gerais */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden; /* Evita barra de rolagem lateral na animação */
+        }
+        
+        .modal-open {
+            display: flex !important;
+        }
+
+        @keyframes slideRight {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw - 6rem)); }
+        }
         .animate-slide-right {
-            animation: slideRight 0.3s linear infinite alternate; /* 0.3s de duração, linear, infinito, alternando direção */
+            animation: slideRight 10s linear infinite alternate;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-blue-700 via-blue-600 to-blue-900 text-white relative flex flex-col">
 
-    <!-- Elementos de Fundo (Anéis Decorativos) -->
-    <div class="absolute top-10 left-[-20px] w-24 h-24 rounded-full border-4 border-yellow-400 opacity-300 animate-slide-right"></div>
-    <div class="absolute bottom-20 right-[-20px] w-32 h-32 rounded-full border-4 border-yellow-400 opacity-100 animate-bounce"></div>
-
     <!-- Container Principal -->
-    <div class="flex-grow flex flex-col items-center justify-center p-4 relative z-10 w-full max-w-md mx-auto">
+    <div class="flex-grow flex flex-col items-center justify-center p-4 relative z-10 w-full max-w-md mx-auto pb-24">
         
         <!-- Card do Convite -->
         <div class="w-full bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl overflow-hidden border-t-4 border-t-yellow-400">
@@ -64,7 +94,7 @@
                     <h1 class="text-5xl font-extrabold italic tracking-tighter drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)] transform -skew-x-6">
                         Artur
                     </h1>
-                    <!-- Estrelas (Ícones SVG) -->
+                    <!-- Estrelas -->
                     <div class="mt-4 flex justify-center space-x-2">
                         <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                         <svg class="text-yellow-400 fill-yellow-400 animate-spin-slow w-8 h-8" style="animation-delay: 100ms;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -74,7 +104,7 @@
             </div>
 
             <!-- Corpo do Texto -->
-            <div class="p-5 text-center space-y5">
+            <div class="p-5 text-center space-y-5">
                 <div><p class="text-lg font-bold text-blue-100">
                     Você foi convocado para essa super aventura em alta velocidade!
                 </p><br></div>
@@ -92,7 +122,7 @@
                 <div class="grid grid-cols-3 gap-3 pt-2">
                     
                     <!-- Botão Mapa -->
-                    <a href="https://www.google.com/maps/place/Gioia+-+D'+Festas+e+Eventos/@-22.8149354,-43.0248364,14.21z/data=!4m6!3m5!1s0x999082c9abdb9f:0xe78eed95f9ed323a!8m2!3d-22.8166145!4d-43.0182042!16s%2Fg%2F1ptzkp4cx?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2OUgBUAM%3D" 
+                    <a href="https://www.google.com/maps/place/Gioia+-+D'+Festas+e+Eventos/@-22.8149354,-43.0248364,14.21z" 
                        target="_blank" 
                        class="flex flex-col items-center justify-center gap-2 group cursor-pointer no-underline">
                         <div class="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center shadow-lg transform transition group-hover:scale-110 group-hover:rotate-3 border-b-4 border-red-800">
@@ -110,7 +140,7 @@
                             <!-- Ícone CheckSquare -->
                             <svg class="text-white w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
                         </div>
-                        <span class="text-xs font-bold uppercase tracking-wide text-white">Confirmar Presença</span>
+                        <span class="text-xs font-bold uppercase tracking-wide text-white">Confirmar</span>
                     </a>
 
                     <!-- Botão Presente (Abre Modal) -->
@@ -128,11 +158,21 @@
             
             <!-- Rodapé -->
             <div class="bg-blue-950 p-3 text-center text-xs text-blue-400 flex justify-center items-center">
-                <!-- Ícone Zap -->
                 <svg class="w-3 h-3 mr-1 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 Mais Rápido, Mais Rápido!
             </div>
         </div>
+    </div>
+
+    <!-- ANIMAÇÃO DO SONIC (Rodapé Fixo) -->
+    <!-- Utilizando GIF externo para garantir a fidelidade e nitidez do personagem -->
+    <div class="sonic-container">
+        <img src="https://www.gifcen.com/wp-content/uploads/2024/01/sonic-running-gif-3.gif" 
+             alt="Sonic Correndo" 
+             class="sonic-image"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:3rem;\'>🦔💨</div>'">
+        <!-- Poeira de corrida (atrás) -->
+        <div class="absolute top-[80%] left-[-10px] w-16 h-4 bg-gradient-to-l from-white to-transparent opacity-60 blur-md rounded-full"></div>
     </div>
 
     <!-- MODAL DE SUGESTÃO DE PRESENTE (Escondido por padrão) -->
