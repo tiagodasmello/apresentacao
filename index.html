@@ -25,13 +25,26 @@
         .modal-open {
             display: flex !important;
         }
+        @keyframes slideRight {
+            0% {
+                transform: translateX(0); /* Posição inicial (esquerda) */
+            }
+            100% {
+                transform: translateX(calc(100vw - 6rem)); /* Posição final (direita, ajustado para o tamanho do elemento) */
+            }
+        }
+
+        /* Aplica a animação ao elemento, definindo duração e repetição */
+        .animate-slide-right {
+            animation: slideRight 0.3s linear infinite alternate; /* 0.3s de duração, linear, infinito, alternando direção */
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-blue-700 via-blue-600 to-blue-900 text-white relative flex flex-col">
 
     <!-- Elementos de Fundo (Anéis Decorativos) -->
-    <div class="absolute top-10 left-[-20px] w-24 h-24 rounded-full border-4 border-yellow-400 opacity-30 animate-bounce"></div>
-    <div class="absolute bottom-20 right-[-20px] w-32 h-32 rounded-full border-4 border-yellow-400 opacity-30 animate-bounce"></div>
+    <div class="absolute top-10 left-[-20px] w-24 h-24 rounded-full border-4 border-yellow-400 opacity-300 animate-slide-right"></div>
+    <div class="absolute bottom-20 right-[-20px] w-32 h-32 rounded-full border-4 border-yellow-400 opacity-100 animate-bounce"></div>
 
     <!-- Container Principal -->
     <div class="flex-grow flex flex-col items-center justify-center p-4 relative z-10 w-full max-w-md mx-auto">
@@ -64,7 +77,7 @@
             <div class="p-5 text-center space-y5">
                 <div><p class="text-lg font-bold text-blue-100">
                     Você foi convocado para essa super aventura em alta velocidade!
-                </p></div>
+                </p><br></div>
             
                 
                 <!-- Detalhes Data/Hora/Local -->
